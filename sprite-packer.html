@@ -627,8 +627,10 @@
     }
 
     function exportImages() {
-        var canvas= packer.getCanvas(false);
-        canvas= TP.ImageUtil.optimize(canvas, 0, true);
+        var canvas= packer.getCanvas(false),
+            canvasBounds = packer.getBounds();
+
+        canvas= TP.ImageUtil.crop(canvas, canvasBounds.x, canvasBounds.y, canvasBounds.w, canvasBounds.h);
         var str= "image/png";
         var strData= canvas.toDataURL(str);
         document.location.href= strData.replace( str, "image/octet-stream" );

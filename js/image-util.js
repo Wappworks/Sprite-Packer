@@ -307,4 +307,15 @@ TP.ImageUtil= {};
         return canvasr;
     };
 
+    TP.ImageUtil.crop = function( image, x, y, w, h ) {
+        w= w||24;
+        h= h||24;
+        var canvas= document.createElement('canvas');
+        canvas.width= w;
+        canvas.height= h;
+        var ctx= canvas.getContext('2d');
+        ctx.drawImage( image, x, y, w, h, 0, 0, w, h );
+
+        return canvas;
+    };
 })();

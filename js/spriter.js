@@ -360,10 +360,14 @@
             return this;
         },
 
-        getCanvas : function( outline ) {
+        getCanvas : function() {
             this.texturePage.toCanvas( this.workingCanvas, false );
 
             return this.workingCanvas;
+        },
+
+        getBounds: function() {
+            return this.texturePage.getBounds();
         },
 
         setOutline : function( bool ) {
