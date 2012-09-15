@@ -429,7 +429,7 @@
 
                         _image.onload = function () {
 
-                            packer.addImage( file.name, this );
+                            packer.addImage( file.name.substr(0, file.name.lastIndexOf('.')), this );
                             updatePageInfo();
                         };
                         _image.src = ev.target.result;
