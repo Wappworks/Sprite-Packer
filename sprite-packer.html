@@ -207,8 +207,9 @@
             <span class="blockcontrol">
                 <span>
                     <select id="output" onchange="updateOutput();">
+                        <option selected>JSON</option>
+                        <option >CAAT</option>
                         <option>CSS</option>
-                        <option selected>CAAT</option>
                     </select>
                 </span>
             </span>
@@ -482,10 +483,17 @@
     function updateOutput() {
         var el= document.getElementById('output');
         var option= el.options[ el.selectedIndex ].value.toLowerCase();
-        if ( option==='css' ) {
-            document.getElementById('imagescsstext').innerHTML= packer.describeAsCSS();
-        } else {
-            document.getElementById('imagescsstext').innerHTML= packer.describeAsCAAT();
+        switch( option ) {
+            case 'css':
+                document.getElementById('imagescsstext').innerHTML= packer.describeAsCSS();
+                break;
+
+            case 'caat':
+                document.getElementById('imagescsstext').innerHTML= packer.describeAsCAAT();
+                break;
+
+            default:
+                document.getElementById('imagescsstext').innerHTML= packer.describeAsJSON();
         }
     }
 

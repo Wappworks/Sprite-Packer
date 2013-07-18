@@ -128,13 +128,13 @@
                 var csstext= "\n";
 
                 if ( -1!==r && -1!==c ) {
-                    csstext+= "&nbsp;"+ name + '_'+r+'_'+c+ ": {\n";
-                    csstext+= '&nbsp;  x: '+(x+c*w)+",\n";
-                    csstext+= '&nbsp;  y: '+(y+r*h)+",\n";
+                    csstext+= '&nbsp;'+ name + '_'+r+'_'+c+ ': {\n';
+                    csstext+= '&nbsp;  x: '+(x+c*w)+',\n';
+                    csstext+= '&nbsp;  y: '+(y+r*h)+',\n';
                 } else {
-                    csstext+= "&nbsp;" + name + ": {\n";
-                    csstext+= '&nbsp;  x: '+x+",\n";
-                    csstext+= '&nbsp;  y: '+y+",\n";
+                    csstext+= '&nbsp;' + name + ': {\n';
+                    csstext+= '&nbsp;  x: '+x+',\n';
+                    csstext+= '&nbsp;  y: '+y+',\n';
                 }
 
                 csstext+= '&nbsp;  width:  '+w+',\n';
@@ -173,8 +173,59 @@
             }
 
             return csstext;
-        }
+        },
 
+        describeAsJSON : function() {
+            function cssElement( name, x, y, w, h, r, c ) {
+                var csstext= "\n";
+
+                if ( -1!==r && -1!==c ) {
+                    csstext+= '&nbsp;"'+ name + '_'+r+'_'+c+ '": {\n';
+                    csstext+= '&nbsp;  "x": '+(x+c*w)+',\n';
+                    csstext+= '&nbsp;  "y": '+(y+r*h)+',\n';
+                } else {
+                    csstext+= '&nbsp;"' + name + '": {\n';
+                    csstext+= '&nbsp;  "x": '+x+',\n';
+                    csstext+= '&nbsp;  "y": '+y+',\n';
+                }
+
+                csstext+= '&nbsp;  "width":  '+w+',\n';
+                csstext+= '&nbsp;  "height": '+h+'\n';
+
+                csstext+= '}\n';
+
+                return csstext;
+            }
+
+            var csstext='';
+            var bi= this.getName().replace(/ |\./g,'_');
+
+            var img= this.getImage();
+            csstext+= cssElement( bi, img.__tx, img.__ty, img.__w, img.__h, -1, -1);
+
+            if ( this.getRows()!=1 || this.getColumns()!=1 ) {
+                csstext+=',';
+
+                for( var t=0; t<this.getRows(); t++ ) {
+                    for( var u=0; u<this.getColumns(); u++ ) {
+                        csstext+= cssElement(
+                            bi,
+                            img.__tx,
+                            img.__ty,
+                            img.__w / this.getColumns(),
+                            img.__h / this.getRows(),
+                            t,
+                            u);
+
+                        if ( t*this.getColumns()+u < this.getRows()*this.getColumns()-1 ) {
+                            csstext+=",";
+                        }
+                    }
+                }
+            }
+
+            return csstext;
+        }
     };
 
 })();
@@ -276,6 +327,26 @@
             for( var i=0, l=this.getNumImages(); i<l; i++ ) {
 
                 csstext+= this.getImageElement(i).describeAsCAAT();
+                if ( i<l-1 ) {
+                    csstext+=',';
+                }
+
+            }
+            csstext+= "}";
+
+            return csstext;
+        },
+
+        /**
+         * Get this packer information representation to be consumed from a JSON file
+         */
+        describeAsJSON : function() {
+            var csstext='';
+            csstext= "{";
+
+            for( var i=0, l=this.getNumImages(); i<l; i++ ) {
+
+                csstext+= this.getImageElement(i).describeAsJSON();
                 if ( i<l-1 ) {
                     csstext+=',';
                 }

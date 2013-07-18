@@ -459,6 +459,10 @@
 
         describeAsCAAT : function() {
 
+        },
+
+        describeAsJSON : function() {
+
         }
     };
 })();
